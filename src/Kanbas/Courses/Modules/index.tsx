@@ -11,7 +11,7 @@ export default function Modules() {
       <br />
       <br />
       </div>
-     <div className="row">
+     <div className="row mt-2">
      <ul id="wd-modules" className="list-group rounded-0">
         <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
           <div className="wd-title p-3 ps-2 bg-secondary">
