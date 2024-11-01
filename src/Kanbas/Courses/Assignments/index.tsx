@@ -1,92 +1,85 @@
-import { BsGripVertical, BsPlus } from "react-icons/bs";
-import ModuleControlButtons from "../Modules/ModuleControlButtons";
-import LessonControlButtons from "../Modules/LessonControlButtons";
-import { CiSearch } from "react-icons/ci";
-import AssignmentsControlButtons from "./AssignmentsControlButtons";
-import { LuFileEdit } from "react-icons/lu";
+import AssignmentControls from "./AssignmentControls";
+import { BsGripVertical } from "react-icons/bs";
+import { IoEllipsisVertical } from "react-icons/io5";
+import { MdOutlineAssignment } from "react-icons/md";
+import GreenCheckmark from "./GreenCheckmark";
+import { IoAddOutline } from "react-icons/io5";
+import { IoMdArrowDropdown } from "react-icons/io";
+import { useParams } from "react-router";
+import * as db from "../../Database";
 
 export default function Assignments() {
+  const { cid } = useParams();
+  const assignment = db.assignments;
+
   return (
     <div id="wd-assignments">
-      <div className="row">
-        <div className="col-md-8">
-          <div className="input-group mb-2 m-1">
-            <span className="input-group-text" id="basic-addon1">
-              <CiSearch />{" "}
-            </span>
-            <input
-              id="wd-search-assignment"
-              className="form-control"
-              placeholder="Search for Assignments"
-            />
-          </div>
-        </div>
-        <div className="col-md-4 text-end">
-          <button
-            id="wd-add-assignment-group"
-            className="btn btn-lg btn-secondary m-1"
-            type="button"
-            data-bs-toggle="dropdown"
-            style={{ marginRight: 2 }}
-          >
-            <BsPlus /> Group
-          </button>
-          <button
-            id="wd-add-assignment"
-            className="btn btn-lg btn-primary m-2 bg-danger"
-            type="button"
-            data-bs-toggle="dropdown"
-          >
-            <BsPlus /> Assignment
-          </button>
-        </div>
-      </div>
-      <div className="row">
-        <ul id="wd-modules" className="list-group rounded-0">
-          <li className="wd-module list-group-item p-0 mb-5 fs-5 border-gray">
-            <div className="wd-title p-3 ps-2 bg-secondary">
+      <AssignmentControls />
+      <br />
+      <br />
+      <br />
+      <br />
+      <ul id="wd-assignment" className="list-group rounded-0">
+        <li className="wd-module" list-group-item p-0 mb-5 fs-5 border-gray>
+          <div className="wd-title p-3 ps-2 bg-secondary ps-1 d-flex justify-content-between">
+            <div className="d-flex align-items-center">
               <BsGripVertical className="me-2 fs-3" />
-              ASSIGNMENTS <AssignmentsControlButtons />
+              <button className="btn btn-lg btn-secondary me-2 float-end">
+                <IoMdArrowDropdown />
+              </button>
+              <h3 id="wd-assignments-title">ASSIGNMENTS</h3>
             </div>
-            <ul className="wd-lessons list-group rounded-0">
-                <li className="wd-lesson list-group-item p-3 ps-1">
-                  <BsGripVertical className="me-2 fs-3" />
-                  <LuFileEdit className="me-2 fs-3" style={{ color: "green" }} />
-                  <a href="#/Kanbas/Courses/1234/Assignments/123" className="text-decoration-none">
-                  A12 - ENV + HTML <LessonControlButtons />
-                  </a>
-                  <p className="ms-5">
-                  <span className="text-danger">Multiple Modules</span> | <b>Not available until</b> May 6 at 12:00am
-                  | <b>Due</b> May 13 at 11:59pm | 100 pts
-                  </p>
-                  </li>
-              <li className="wd-lesson list-group-item p-3 ps-1">
-                <BsGripVertical className="me-2 fs-3" />
-                <LuFileEdit className="me-2 fs-3" style={{ color: "green" }} />
-                <a href="#/Kanbas/Courses/1234/Assignments/123" className="text-decoration-none">
-                A2 - CSS + BOOTSTRAP <LessonControlButtons />
-                </a>
-                <p className="ms-5">
-                <span className="text-danger">Multiple Modules</span> | <b>Not available until</b> May 13 at
-                  12:00am | <b>Due</b> May 20 at 11:59pm | 100 pts
-                </p>
-              </li>
-
-              <li className="wd-lesson list-group-item p-3 ps-1">
-                <BsGripVertical className="me-2 fs-3" />
-                <LuFileEdit className="me-2 fs-3" style={{ color: "green" }} />
-                <a href="#/Kanbas/Courses/1234/Assignments/123" className="text-decoration-none">
-                A3 - JAVASCRIPT + REACT <LessonControlButtons />
-                </ a>
-                <p className="ms-5">
-                <span className="text-danger">Multiple Modules</span> | <b>Not available until</b> May 6 at 12:00am
-                  | <b>Due</b> May 13 at 11:59pm | 100 pts
-                </p>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
+            <div>
+              <button className="btn btn-lg btn-secondary me-2 float-end">
+                <IoAddOutline />
+              </button>
+              <span className="border border-dark p-1 rounded me-2  float-end">
+                {" "}
+                40% of Total
+              </span>
+            </div>
+          </div>
+          <ul className="wd-lessons list-group rounded-0">
+            {assignment
+              .filter((assignment: any) => assignment.course === cid)
+              .map((assignment: any) => (
+                <li className="wd-lesson list-group-item p-3 ps-1 d-flex justify-content-between">
+                  <div className="d-flex align-items-center">
+                    <BsGripVertical className="me-2 fs-3" />
+                    <MdOutlineAssignment className="me-2 fs-3 wd-assignment-link text-success" />
+                    <p>
+                      <a
+                        className="wd-assignment-link text-dark text-decoration-none"
+                        href={`#/Kanbas/Courses/${cid}/Assignments/${assignment._id}`}
+                      >
+                        <h5>{assignment.title}</h5>
+                      </a>
+                      <span className="text-danger">Multiple modules</span> |{" "}
+                      <b>Not available until</b>{" "}
+                      {new Date(assignment.available).toLocaleDateString(
+                        "en-US",
+                        { month: "short", day: "numeric" }
+                      )}{" "}
+                      at {"12:00 AM"} | <br />
+                      <b>Due</b>{" "}
+                      {new Date(assignment.due).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}{" "}
+                      at {"11:59 PM"} | {assignment.points}pts
+                    </p>
+                  </div>
+                  <div>
+                    <GreenCheckmark />
+                    <button className="btn btn-lg btn-transparent me-2 float-end">
+                      <IoEllipsisVertical className="fs-4" />
+                    </button>
+                  </div>
+                </li>
+              ))}
+          </ul>
+        </li>
+      </ul>
     </div>
   );
 }
